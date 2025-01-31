@@ -2,14 +2,6 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
 }
-#title-screen {
-    text-align: center;
-    margin-top: 50px;
-}
-
-#game-container {
-    text-align: center;
-}
 
 #game-board {
     display: grid;
