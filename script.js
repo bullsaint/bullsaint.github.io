@@ -35,3 +35,45 @@ document.getElementById('start-button').addEventListener('click', () => {
     document.getElementById('title-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
 });
+const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+function updateLeaderboard() {
+    const list = document.getElementById('leaderboard');
+    list.innerHTML = '';
+    leaderboard
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5) // Show only the top 5
+        .forEach(entry => {
+            const li = document.createElement('li');
+            li.textContent = `${entry.name}: $${entry.score.toLocaleString()}`;
+            list.appendChild(li);
+        });
+}
+
+function saveScore() {
+    const name = prompt("Enter your name for the leaderboard:");
+    if (!name) return;
+    
+    leaderboard.push({ name, score: earnings });
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+    updateLeaderboard();
+}
+
+// Call saveScore() when game ends
+function eatGrape(grape) {
+    if (gameOver) return;
+
+    if (Math.random() < 0.001) {
+        message.innerText = "You ate the poisoned grape! Game over.";
+        saveScore();
+        gameOver = true;
+        return;
+    }
+
+    earnings += 50000;
+    earningsDisplay.innerText = `Earnings: $${earnings.toLocaleString()}`;
+    grape.classList.add('eaten');
+    grape.removeEventListener('click', () => eatGrape(grape));
+}
+
+updateLeaderboard();
