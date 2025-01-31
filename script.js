@@ -1,6 +1,7 @@
 const gameBoard = document.getElementById('game-board');
 const earningsDisplay = document.getElementById('earnings');
 const message = document.getElementById('message');
+const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
 let earnings = 0;
 let gameOver = false;
@@ -34,8 +35,6 @@ function eatGrape(grape) {
     grape.classList.add('eaten');
     grape.removeEventListener('click', () => eatGrape(grape));
 }
-
-const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
 function updateLeaderboard() {
     const list = document.getElementById('leaderboard');
