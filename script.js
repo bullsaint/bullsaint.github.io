@@ -31,3 +31,7 @@ function eatGrape(grape) {
     grape.classList.add('eaten');
     grape.removeEventListener('click', () => eatGrape(grape));
 }
+document.getElementById('start-button').addEventListener('click', () => {
+    document.getElementById('title-screen').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+});
