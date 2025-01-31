@@ -4,6 +4,10 @@ const message = document.getElementById('message');
 
 let earnings = 0;
 let gameOver = false;
+document.getElementById('start-button').addEventListener('click', () => {
+    document.getElementById('title-screen').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+});
 
 // Create 1,000 grapes
 for (let i = 0; i < 1000; i++) {
