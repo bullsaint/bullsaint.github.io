@@ -6,8 +6,13 @@ let difficulty = 'easy';
 const earningsDisplay = document.getElementById('earnings');
 const timerDisplay = document.getElementById('timer');
 const timeLeftDisplay = document.getElementById('time-left');
+const message = document.getElementById('message');
 const gameBoard = document.getElementById('game-board');
 const restartButton = document.getElementById('restart');
+const biteSound = document.getElementById('bite-sound');
+const poisonSound = document.getElementById('poison-sound');
+const goldenSound = document.getElementById('golden-sound');
+const rottenSound = document.getElementById('rotten-sound');
 
 function startGame(selectedDifficulty) {
     difficulty = selectedDifficulty;
@@ -54,23 +59,43 @@ function moveDeadlyGrape() {
     }
 }
 
+// Generate Grapes
+for (let i = 0; i < 1000; i++) {
+    const grape = document.createElement('div');
+    grape.classList.add('grape');
+    grape.addEventListener('click', () => eatGrape(grape));
+    gameBoard.appendChild(grape);
+}
+
+// Function to Eat Grapes
 function eatGrape(grape) {
     if (gameOver) return;
 
-    if (grape === deadlyGrape) {
-        earningsDisplay.innerText = "You ate the poisoned grape! Game over.";
+    const chance = Math.random();
+
+    if (chance < 0.001) {  // Poisoned grape
+        message.innerText = "You ate the poisoned grape! Game over.";
+        poisonSound.play();
         gameOver = true;
-        restartButton.style.display = 'block';
         return;
+    } else if (chance < 0.005) {  // Golden grape
+        message.innerText = "You found a Golden Grape! +$250,000!";
+        earnings += 250000;
+        goldenSound.play();
+        grape.classList.add('golden');
+    } else if (chance < 0.010) {  // Rotten grape
+        message.innerText = "Oh no! Rotten Grape! -$100,000!";
+        earnings -= 100000;
+        rottenSound.play();
+        grape.classList.add('rotten');
+    } else {  // Normal grape
+        earnings += 50000;
+        biteSound.play();
     }
 
-    earnings += 50000;
     earningsDisplay.innerText = `Earnings: $${earnings.toLocaleString()}`;
     grape.classList.add('eaten');
-    
-    if (difficulty === 'medium' || difficulty === 'hard') {
-        moveDeadlyGrape();
-    }
+    grape.removeEventListener('click', () => eatGrape(grape));
 }
 
 function startTimer() {
