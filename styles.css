@@ -39,13 +39,6 @@ body {
     padding: 10px;
     border: 1px solid #ddd;
 }
-#game-board {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    gap: 10px;
-    max-width: 400px;
-    margin: auto;
-}
 
 /* Grapes */
 .grape {
@@ -84,9 +77,7 @@ body {
 
 /* Mobile Adjustments */
 @media (max-width: 600px) {
-    #game-board {
-        max-width: 90%;
-    }
+
     .grape {
         width: 40px;
         height: 40px;
