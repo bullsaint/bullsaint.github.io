@@ -2,9 +2,17 @@ const gameBoard = document.getElementById('game-board');
 const earningsDisplay = document.getElementById('earnings');
 const message = document.getElementById('message');
 const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+const earningsDisplay = document.getElementById('earnings');
+const timerDisplay = document.getElementById('timer');
+const timeLeftDisplay = document.getElementById('time-left');
+const gameBoard = document.getElementById('game-board');
 
 let earnings = 0;
 let gameOver = false;
+let earnings = 0;
+let deadlyGrape;
+let timeLeft = 60; // Default time limit for Hard mode
+let difficulty = 'easy';
 document.getElementById('start-button').addEventListener('click', () => {
     document.getElementById('title-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
@@ -16,7 +24,80 @@ for (let i = 0; i < 1000; i++) {
     grape.addEventListener('click', () => eatGrape(grape));
     gameBoard.appendChild(grape);
 }
+function startGame(selectedDifficulty) {
+    difficulty = selectedDifficulty;
+    document.getElementById('difficulty-screen').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+    
+    generateGrapes();
+    
+    if (difficulty === 'hard') {
+        timerDisplay.style.display = 'block';
+        timeLeftDisplay.innerText = timeLeft;
+        startTimer();
+    }
+}
 
+function generateGrapes() {
+    gameBoard.innerHTML = '';
+    for (let i = 0; i < 1000; i++) {
+        let grape = document.createElement('div');
+        grape.classList.add('grape');
+        grape.addEventListener('click', () => eatGrape(grape));
+        gameBoard.appendChild(grape);
+    }
+    
+    placeDeadlyGrape();
+}
+
+function placeDeadlyGrape() {
+    const grapes = document.querySelectorAll('.grape');
+    deadlyGrape = grapes[Math.floor(Math.random() * grapes.length)];
+    deadlyGrape.classList.add('deadly');
+}
+
+function moveDeadlyGrape() {
+    if (!gameOver) {
+        deadlyGrape.classList.remove('deadly');
+        placeDeadlyGrape();
+    }
+}
+
+function eatGrape(grape) {
+    if (gameOver) return;
+
+    if (grape === deadlyGrape) {
+        document.getElementById('earnings').innerText = "You ate the poisoned grape! Game over.";
+        gameOver = true;
+        return;
+    }
+
+    earnings += 50000;
+    earningsDisplay.innerText = `Earnings: $${earnings.toLocaleString()}`;
+    grape.classList.add('eaten');
+    
+    if (difficulty === 'medium' || difficulty === 'hard') {
+        moveDeadlyGrape();
+    }
+}
+
+function startTimer() {
+    const timer = setInterval(() => {
+        if (gameOver) {
+            clearInterval(timer);
+            return;
+        }
+        
+        timeLeft--;
+        timeLeftDisplay.innerText = timeLeft;
+        
+        if (timeLeft <= 0) {
+            document.getElementById('earnings').innerText = "Time's up! Game over.";
+            gameOver = true;
+            clearInterval(timer);
+        }
+    }, 1000);
+}
 function eatGrape(grape) {
     if (gameOver) return;
 

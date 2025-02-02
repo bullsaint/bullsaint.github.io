@@ -16,6 +16,18 @@
         <p>Click the grapes to earn $50,000 each! But beware, one is poisoned...</p>
         <button id="start-button">Start Game</button>
     </div>
+<div id="difficulty-screen">
+    <h2>Select Difficulty</h2>
+    <button onclick="startGame('easy')">Easy</button>
+    <button onclick="startGame('medium')">Medium</button>
+    <button onclick="startGame('hard')">Hard</button>
+</div>
+<div id="game-container" style="display:none;">
+    <h1>Grape Clicker</h1>
+    <p id="earnings">Earnings: $0</p>
+    <p id="timer" style="display:none;">Time Left: <span id="time-left"></span> sec</p>
+    <div id="game-board"></div>
+</div>
 
     <div id="game-container" style="display: none;">
         <p id="earnings">Earnings: $0</p>
